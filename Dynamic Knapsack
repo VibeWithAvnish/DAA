@@ -1,0 +1,80 @@
+#include<stdio.h>
+#include<math.h>
+int max(int a, int b) { return (a > b)? a : b; }
+// Returns the maximum value that can be put in a knapsack of capacity
+void D_knapsack(int n, int m, int p[10], int w[10]) //function definition
+{
+ int v[n+1][m+1]; //multi-dimensional array initialized to 0
+ int xi[10]={0}; //sequence array initialized to 0
+ int I,j,k;
+ for(i=0;i<=n;i++)
+ {
+ for(j=0;j<=m;j++)
+ {
+ if(i==0 || j==0) //initializing to 0
+{
+ v[i][j] = 0;
+ }
+ else if(w[i-1]<=j)
+ {
+ v[i][j] = max(v[i-1][j],v[i-1][j-w[i-1]]+p[i-1]); //assigning values in the table
+ }
+ else
+ {
+ v[i][j] = v[i-1][j];
+ }
+ }
+ }
+ printf("\nThe vector table is:\n"); //printing 2D array
+ for(i=0;i<=n;i++)
+ {
+ for(j=0;j<=m;j++)
+ {
+ printf("%d\t", v[i][j]);
+ }
+ printf("\n");
+ }
+ i=n;
+ k=m;
+ while(i>0 && k>0) //to find the resultant vector (sequence of selected objects)
+ {
+ if(v[i][k]!=v[i-1][k])
+ {
+ xi[i]=1;
+ k=k-w[i-1];
+ i=i-1;
+ }
+ else
+ {
+ i--;
+ }
+ }
+ printf("\nThe resultant vector is ");
+ //printing resultant vector (sequence of selected objects)
+ printf("( ");
+ for(i=1;i<=n;i++)
+ {
+ printf("%d ",xi[i]);
+ }
+ printf(")\n");
+ printf("\nThe maximum profit of the given objects is: %d\n", v[n][m]); //printing
+maximum profit
+}
+int main()
+{
+ int p[10]={0}; //profit of elements
+ int w[10]={0}; //weight of elements
+ int n,m; //n-no of elements & m-capacity
+ printf("Please enter number of elements:"); //user input for no of elements
+scanf("%d",&n);
+ printf("Please enter capacity:"); //user input for capacity
+ scanf("%d",&m);
+ printf("Please enter profit and weight of the elements:");
+//user input for weight and profit
+ for(int i=0;i<n;i++)
+ {
+ scanf("%d %d", &p[i], &w[i]);
+ }
+ D_knapsack(n,m,p,w); //function call
+ return 0;
+} 
